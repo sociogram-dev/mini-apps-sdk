@@ -10,8 +10,14 @@
   "module": "./dist/mini-apps-sdk.js",
   "exports": {
     ".": {
-      "import": "./dist/mini-apps-sdk.js",
-      "require": "./dist/mini-apps-sdk.umd.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/mini-apps-sdk.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/mini-apps-sdk.umd.js"
+      }
     }
   },
   "types": "./dist/index.d.ts",
