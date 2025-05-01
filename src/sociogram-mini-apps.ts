@@ -129,6 +129,12 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       return miniAppData.version;
     },
 
+    copyToClipboard: (text: string, callback?: () => void) => {
+      console.log('[Sociogram.MiniApp] copyToClipboard', text);
+      webView.postEvent('mini_app_copy_to_clipboard', () => {}, { text });
+      callback?.();
+    },
+
     openLink: (url: string, options?: Record<string, unknown>) => {
       console.log('[Sociogram.MiniApp] openLink', url, options);
       webView.postEvent('mini_app_open_link', () => {}, { url, options });
