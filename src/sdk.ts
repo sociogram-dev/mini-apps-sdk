@@ -1,6 +1,6 @@
 import './sociogram-mini-apps';
-import { Sociogram, MiniApp as MiniAppTypes } from './types';
+import { MiniAppAPI } from './types/sociogram-mini-apps.types';
 
-const sociogramWindow = window as unknown as Window & { Sociogram: Sociogram };
+const sociogramWindow = window as unknown as Window & { Sociogram: { MiniApp: MiniAppAPI } };
 
-export const MiniApp: MiniAppTypes = sociogramWindow.Sociogram.MiniApp;
+export const MiniApp = sociogramWindow.Sociogram.MiniApp;
