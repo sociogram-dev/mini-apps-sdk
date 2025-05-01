@@ -7,6 +7,8 @@ import {
   WebViewAPI,
   MiniAppData,
   MiniAppAPI,
+  InvoiceStatus,
+  InvoiceCallback,
 } from './types/sociogram-mini-apps.types';
 
 const detectEnvironment = () => {
@@ -49,6 +51,27 @@ const createWebView = (): WebViewAPI => {
         console.error('Error in event handler:', error);
       }
     }
+  };
+
+  const onEvent = (eventType: EventType, callback: EventCallback) => {
+    if (eventHandlers[eventType] === undefined) {
+      eventHandlers[eventType] = [];
+    }
+    const index = eventHandlers[eventType].indexOf(callback);
+    if (index === -1) {
+      eventHandlers[eventType].push(callback);
+    }
+  };
+
+  const offEvent = (eventType: EventType, callback: EventCallback) => {
+    if (eventHandlers[eventType] === undefined) {
+      return;
+    }
+    const index = eventHandlers[eventType].indexOf(callback);
+    if (index === -1) {
+      return;
+    }
+    eventHandlers[eventType].splice(index, 1);
   };
 
   if (isIframe) {
@@ -108,6 +131,8 @@ const createWebView = (): WebViewAPI => {
     receiveEvent,
     callEventCallbacks,
     postMessage,
+    onEvent,
+    offEvent,
   };
 };
 
@@ -116,6 +141,17 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     initData: webView.initParams,
     version: '1.0',
   };
+
+  const activeInvoices: Map<string, InvoiceCallback> = new Map();
+
+  webView.onEvent('invoice_closed', (eventType: EventType, eventData: EventData) => {
+    const { invoiceId, status } = eventData as { invoiceId: string; status: InvoiceStatus };
+    const callback = activeInvoices.get(invoiceId);
+    if (callback) {
+      callback(status);
+      activeInvoices.delete(invoiceId);
+    }
+  });
 
   const miniApp: MiniAppAPI = {
     get initData() {
@@ -143,9 +179,24 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       webView.postEvent('mini_app_open_telegram_link', () => {}, { url, options });
     },
 
-    openInvoice: (data: Record<string, unknown>, callback?: () => void) => {
-      webView.postEvent('mini_app_open_invoice', () => {}, { data });
-      callback?.();
+    openInvoice: (invoiceData: Record<string, unknown>, callback?: InvoiceCallback) => {
+      const invoiceId =
+        invoiceData.id?.toString() || `invoice_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+      if (callback) {
+        activeInvoices.set(invoiceId, callback);
+      }
+
+      const completeInvoiceData = {
+        ...invoiceData,
+        id: invoiceId,
+      };
+
+      webView.postEvent('mini_app_open_invoice', () => {}, {
+        data: completeInvoiceData,
+      });
+
+      return invoiceId;
     },
   };
 
