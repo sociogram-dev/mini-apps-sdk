@@ -16,7 +16,13 @@ const createWebView = (): WebViewAPI => {
 
   let isIframe = false;
   try {
-    isIframe = window.parent !== window;
+    // First check if we're in React Native WebView
+    if (window.ReactNativeWebView) {
+      isIframe = false;
+    } else {
+      // If not in React Native, check if we're in an iframe
+      isIframe = window.parent !== window;
+    }
 
     if (isIframe) {
       window.addEventListener('message', event => {
