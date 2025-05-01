@@ -144,7 +144,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
 
   const activeInvoices: Map<string, InvoiceCallback> = new Map();
 
-  webView.onEvent('invoice_closed', (eventType: EventType, eventData: EventData) => {
+  webView.onEvent('invoice_closed', (_, eventData: EventData) => {
     const { invoiceId, status } = eventData as { invoiceId: string; status: InvoiceStatus };
     const callback = activeInvoices.get(invoiceId);
     if (callback) {
