@@ -192,9 +192,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
         invoiceId,
       };
 
-      webView.postEvent('mini_app_open_invoice', () => {}, {
-        data: completeInvoiceData,
-      });
+      webView.postEvent('mini_app_open_invoice', () => {}, completeInvoiceData);
 
       return invoiceId;
     },
