@@ -136,6 +136,11 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       webView.postEvent('mini_app_open_link', () => {}, { url, options });
     },
 
+    openTelegramLink: (url: string, options?: Record<string, unknown>) => {
+      console.log('[Sociogram.MiniApp] openTelegramLink', url, options);
+      webView.postEvent('mini_app_open_telegram_link', () => {}, { url, options });
+    },
+
     openInvoice: (data: Record<string, unknown>, callback?: () => void) => {
       console.log('[Sociogram.MiniApp] openInvoice', data);
       webView.postEvent('mini_app_open_invoice', () => {}, { data });

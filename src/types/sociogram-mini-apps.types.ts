@@ -25,6 +25,7 @@ export interface MiniAppAPI {
   get version(): string;
   platform?: string;
   openLink: (url: string, options?: Record<string, unknown>) => void;
+  openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
   openInvoice: (data: Record<string, unknown>, callback?: () => void) => void;
   showPopup: (params: Record<string, unknown>, callback?: () => void) => void;
 }
