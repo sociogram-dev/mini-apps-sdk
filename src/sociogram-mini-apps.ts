@@ -14,8 +14,6 @@ const createWebView = (): WebViewAPI => {
 
   const initParams = safeParseUrlParams();
 
-  console.log('[Sociogram.WebView] > initParams', { initParams }, safeParseUrlParams());
-
   let isIframe = false;
   try {
     isIframe = window.parent !== window;
@@ -119,7 +117,7 @@ const createWebView = (): WebViewAPI => {
 
 const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
   const miniAppData: MiniAppData = {
-    initData: '',
+    initData: webView.initParams,
     version: '1.0',
   };
 

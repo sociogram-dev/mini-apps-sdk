@@ -15,13 +15,13 @@ export interface WebViewAPI {
 }
 
 export interface MiniAppData {
-  initData: string;
+  initData: Record<string, string | null>;
   version: string;
   platform?: string;
 }
 
 export interface MiniAppAPI {
-  get initData(): string;
+  get initData(): Record<string, string | null>;
   get version(): string;
   platform?: string;
   openLink: (url: string, options?: Record<string, unknown>) => void;
