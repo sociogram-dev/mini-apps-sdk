@@ -65,8 +65,14 @@ miniApp.openLink('https://example.com', { options });
 // Open invoice
 miniApp.openInvoice(invoiceData, callback);
 
-// Show popup
-miniApp.showPopup(popupParams, callback);
+// Copy text to clipboard
+miniApp.copyToClipboard('text to copy', callback);
+
+// Open login modal
+miniApp.openLoginModal(callback);
+
+// Open Telegram link
+miniApp.openTelegramLink('https://t.me/example', { options });
 
 // Access initialization data
 const initData = miniApp.initData;
