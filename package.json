@@ -1,6 +1,6 @@
 {
-  "name": "mini-apps-sdk",
-  "version": "1.0.0",
+  "name": "@sociogram-dev/mini-apps-sdk",
+  "version": "0.0.1",
   "description": "SDK for creating mini apps that integrate with Sociogram",
   "type": "module",
   "files": [
@@ -37,7 +37,7 @@
     "social",
     "platform"
   ],
-  "author": "Your Name",
+  "author": "Sociogram",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sociogram-dev/mini-apps-sdk/issues"

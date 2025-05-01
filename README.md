@@ -13,9 +13,9 @@ A TypeScript SDK for creating mini applications that integrate with the Sociogra
 ## Installation
 
 ```bash
-npm install mini-apps-sdk
+npm install @sociogram-dev/mini-apps-sdk
 # or
-yarn add mini-apps-sdk
+yarn add @sociogram-dev/mini-apps-sdk
 ```
 
 ## Usage

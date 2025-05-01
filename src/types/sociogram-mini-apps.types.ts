@@ -1,4 +1,4 @@
-import { urlParseHashParams, urlSafeDecode, urlParseQueryString } from '../utils/core.utils';
+import { urlSafeDecode, urlParseQueryString } from '../utils/core.utils';
 
 export type EventType = string;
 export type EventData = unknown;
@@ -16,15 +16,13 @@ export interface WebViewAPI {
 
 export interface MiniAppData {
   initData: string;
-  initDataUnsafe: Record<string, unknown>;
   version: string;
   platform?: string;
 }
 
 export interface MiniAppAPI {
-  initData: string;
-  initDataUnsafe: Record<string, unknown>;
-  version: string;
+  get initData(): string;
+  get version(): string;
   platform?: string;
   openLink: (url: string, options?: Record<string, unknown>) => void;
   openInvoice: (data: Record<string, unknown>, callback?: () => void) => void;
@@ -38,7 +36,6 @@ declare global {
       Utils: {
         urlSafeDecode: typeof urlSafeDecode;
         urlParseQueryString: typeof urlParseQueryString;
-        urlParseHashParams: typeof urlParseHashParams;
       };
       MiniApp: MiniAppAPI;
     };

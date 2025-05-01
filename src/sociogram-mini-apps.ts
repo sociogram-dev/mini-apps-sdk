@@ -1,4 +1,4 @@
-import { urlParseHashParams, urlSafeDecode, urlParseQueryString } from './utils/core.utils';
+import { urlSafeDecode, urlParseQueryString } from './utils/core.utils';
 import {
   EventType,
   EventData,
@@ -9,32 +9,12 @@ import {
   MiniAppAPI,
 } from './types/sociogram-mini-apps.types';
 
-// Declare Sociogram namespace on window
-declare global {
-  interface Window {
-    Sociogram: {
-      WebView: WebViewAPI;
-      Utils: {
-        urlSafeDecode: typeof urlSafeDecode;
-        urlParseQueryString: typeof urlParseQueryString;
-        urlParseHashParams: typeof urlParseHashParams;
-      };
-      MiniApp: MiniAppAPI;
-    };
-  }
-}
-
 const createWebView = (): WebViewAPI => {
   const eventHandlers: EventHandler = {};
 
-  let locationHash = '';
-  try {
-    locationHash = location.hash.toString();
-  } catch (error) {
-    console.error('Failed to get location hash:', error);
-  }
+  const initParams = urlParseQueryString(urlSafeDecode(location.search));
 
-  const initParams = urlParseHashParams(locationHash);
+  console.log('[Sociogram.WebView] > initParams', initParams);
 
   let isIframe = false;
   try {
@@ -140,16 +120,12 @@ const createWebView = (): WebViewAPI => {
 const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
   const miniAppData: MiniAppData = {
     initData: '',
-    initDataUnsafe: {},
     version: '1.0',
   };
 
   const miniApp: MiniAppAPI = {
     get initData() {
       return miniAppData.initData;
-    },
-    get initDataUnsafe() {
-      return miniAppData.initDataUnsafe;
     },
     get version() {
       return miniAppData.version;
@@ -187,7 +163,6 @@ const initSociogramAPI = () => {
   window.Sociogram.Utils = {
     urlSafeDecode,
     urlParseQueryString,
-    urlParseHashParams,
   };
 
   window.Sociogram.MiniApp = createMiniApp(webView);
