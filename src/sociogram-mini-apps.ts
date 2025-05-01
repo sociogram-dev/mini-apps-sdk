@@ -68,7 +68,6 @@ const createWebView = (): WebViewAPI => {
 
   const postMessage = (message: Record<string, unknown>) => {
     const messageString = JSON.stringify(message);
-
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(messageString);
     } else if (isIframe) {
@@ -78,16 +77,12 @@ const createWebView = (): WebViewAPI => {
 
   const postEvent = (eventType: EventType, callback?: () => void, eventData: EventData = '') => {
     console.log('[Sociogram.WebView] > postEvent', eventType, eventData);
-    if (isIframe) {
-      try {
-        postMessage({ eventType, eventData });
-        callback?.();
-      } catch (error) {
-        callback?.();
-        console.error('Failed to post message:', error);
-      }
-    } else {
+    try {
+      postMessage({ eventType, eventData });
       callback?.();
+    } catch (error) {
+      callback?.();
+      console.error('Failed to post message:', error);
     }
   };
 
