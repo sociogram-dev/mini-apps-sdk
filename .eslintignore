@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+public/
+*.config.js
+*.config.ts
+
+# IDE
+.vscode/
+.idea/
+
+.vite.config.ts

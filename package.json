@@ -1,0 +1,61 @@
+{
+  "name": "mini-apps-sdk",
+  "version": "1.0.0",
+  "description": "SDK for creating mini apps that integrate with Sociogram",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/mini-apps-sdk.umd.js",
+  "module": "./dist/mini-apps-sdk.js",
+  "exports": {
+    ".": {
+      "import": "./dist/mini-apps-sdk.js",
+      "require": "./dist/mini-apps-sdk.umd.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:watch": "tsc --watch & vite build --watch",
+    "preview": "vite preview",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sociogram-dev/mini-apps-sdk.git"
+  },
+  "keywords": [
+    "sociogram",
+    "web",
+    "sdk",
+    "social",
+    "platform"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sociogram-dev/mini-apps-sdk/issues"
+  },
+  "homepage": "https://github.com/sociogram-dev/mini-apps-sdk#readme",
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.6",
+    "prettier": "^3.5.3",
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^8.31.1",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "^3.5.2",
+    "vitest": "^3.1.2"
+  }
+}
