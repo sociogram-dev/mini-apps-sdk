@@ -23,6 +23,10 @@ yarn add @sociogram-dev/mini-apps-sdk
 ### Basic Setup
 
 ```typescript
+// Import the SDK
+import MiniApp from '@sociogram-dev/mini-apps-sdk';
+
+// Or access through the global Sociogram namespace
 // Your mini app will automatically have access to the Sociogram namespace
 // through the window object after including the SDK
 
@@ -30,10 +34,11 @@ yarn add @sociogram-dev/mini-apps-sdk
 const webView = window.Sociogram.WebView;
 
 // Access utility functions
-const { urlSafeDecode, urlParseQueryString, urlParseHashParams } = window.Sociogram.Utils;
+const { urlSafeDecode, urlParseQueryString, safeParseUrlParams } = window.Sociogram.Utils;
 
 // Access MiniApp API
 const miniApp = window.Sociogram.MiniApp;
+// Or use the imported MiniApp directly
 ```
 
 ### WebView API
@@ -46,6 +51,14 @@ webView.postEvent('event_name', callback, eventData);
 
 // Receive events from the platform
 webView.receiveEvent('event_name', eventData);
+
+// Subscribe to events
+webView.onEvent('event_name', (eventType, eventData) => {
+  // Handle event
+});
+
+// Unsubscribe from events
+webView.offEvent('event_name', callbackFunction);
 
 // Check if running in iframe
 const isIframe = webView.isIframe;
@@ -62,8 +75,8 @@ The MiniApp API provides high-level functionality for your mini app:
 // Open external links
 miniApp.openLink('https://example.com', { options });
 
-// Open invoice
-miniApp.openInvoice(invoiceData, callback);
+// Open invoice - returns a string identifier
+const invoiceId = miniApp.openInvoice(invoiceData, callback);
 
 // Copy text to clipboard
 miniApp.copyToClipboard('text to copy', callback);
@@ -76,8 +89,8 @@ miniApp.openTelegramLink('https://t.me/example', { options });
 
 // Access initialization data
 const initData = miniApp.initData;
-const initDataUnsafe = miniApp.initDataUnsafe;
 const version = miniApp.version;
+const platform = miniApp.platform; // Optional platform information
 ```
 
 ## Development
