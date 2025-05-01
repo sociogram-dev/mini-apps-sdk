@@ -26,9 +26,9 @@ export interface MiniAppAPI {
   platform?: string;
   copyToClipboard: (text: string, callback?: () => void) => void;
   openLink: (url: string, options?: Record<string, unknown>) => void;
+  openLoginModal: (callback?: () => void) => void;
   openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
   openInvoice: (data: Record<string, unknown>, callback?: () => void) => void;
-  showPopup: (params: Record<string, unknown>, callback?: () => void) => void;
 }
 
 declare global {

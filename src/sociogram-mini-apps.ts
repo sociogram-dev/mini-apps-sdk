@@ -130,29 +130,26 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     },
 
     copyToClipboard: (text: string, callback?: () => void) => {
-      console.log('[Sociogram.MiniApp] copyToClipboard', text);
       webView.postEvent('mini_app_copy_to_clipboard', () => {}, { text });
       callback?.();
     },
 
     openLink: (url: string, options?: Record<string, unknown>) => {
-      console.log('[Sociogram.MiniApp] openLink', url, options);
       webView.postEvent('mini_app_open_link', () => {}, { url, options });
     },
 
+    openLoginModal: (callback?: () => void) => {
+      webView.postEvent('mini_app_open_login_modal', () => {}, {});
+      callback?.();
+    },
+
     openTelegramLink: (url: string, options?: Record<string, unknown>) => {
-      console.log('[Sociogram.MiniApp] openTelegramLink', url, options);
       webView.postEvent('mini_app_open_telegram_link', () => {}, { url, options });
     },
 
     openInvoice: (data: Record<string, unknown>, callback?: () => void) => {
-      console.log('[Sociogram.MiniApp] openInvoice', data);
       webView.postEvent('mini_app_open_invoice', () => {}, { data });
       callback?.();
-    },
-
-    showPopup: (params: Record<string, unknown>, callback?: () => void) => {
-      console.log('[Sociogram.MiniApp] showPopup', params, callback);
     },
   };
 
