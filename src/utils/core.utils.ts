@@ -17,8 +17,8 @@ export const urlSafeDecode = (urlencoded: string): string => {
   }
 };
 
-export const urlParseQueryString = (queryString: string): Record<string, string | undefined> => {
-  const params: Record<string, string | undefined> = {};
+export const urlParseQueryString = (queryString: string): Record<string, string | null> => {
+  const params: Record<string, string | null> = {};
   if (!queryString.length) {
     return params;
   }
@@ -27,8 +27,20 @@ export const urlParseQueryString = (queryString: string): Record<string, string 
   for (i = 0; i < queryStringParams.length; i++) {
     param = queryStringParams[i].split('=');
     paramName = urlSafeDecode(param[0]);
-    paramValue = param[1] == null ? undefined : urlSafeDecode(param[1]);
+    paramValue = param[1] == null ? null : urlSafeDecode(param[1]);
     params[paramName] = paramValue;
   }
   return params;
+};
+
+export const safeParseUrlParams = (): Record<string, string | null> => {
+  try {
+    const searchParams = new URLSearchParams(window.location.search);
+    return Object.fromEntries(
+      Array.from(searchParams.entries()).map(([key, value]) => [key, value === 'null' ? null : value])
+    );
+  } catch (error) {
+    console.error('[Sociogram.MiniApp] Failed to parse URL parameters:', error);
+    return {};
+  }
 };

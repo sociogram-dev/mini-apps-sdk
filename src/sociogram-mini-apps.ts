@@ -1,4 +1,4 @@
-import { urlSafeDecode, urlParseQueryString } from './utils/core.utils';
+import { urlSafeDecode, urlParseQueryString, safeParseUrlParams } from './utils/core.utils';
 import {
   EventType,
   EventData,
@@ -12,7 +12,7 @@ import {
 const createWebView = (): WebViewAPI => {
   const eventHandlers: EventHandler = {};
 
-  const initParams = urlParseQueryString(urlSafeDecode(location.search));
+  const initParams = safeParseUrlParams();
 
   console.log('[Sociogram.WebView] > initParams', initParams);
 
@@ -163,6 +163,7 @@ const initSociogramAPI = () => {
   window.Sociogram.Utils = {
     urlSafeDecode,
     urlParseQueryString,
+    safeParseUrlParams,
   };
 
   window.Sociogram.MiniApp = createMiniApp(webView);

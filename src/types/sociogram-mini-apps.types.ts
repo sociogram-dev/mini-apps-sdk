@@ -1,4 +1,4 @@
-import { urlSafeDecode, urlParseQueryString } from '../utils/core.utils';
+import { urlSafeDecode, urlParseQueryString, safeParseUrlParams } from '../utils/core.utils';
 
 export type EventType = string;
 export type EventData = unknown;
@@ -6,7 +6,7 @@ export type EventCallback = (eventType: EventType, eventData: EventData) => void
 export type EventHandler = Record<EventType, EventCallback[]>;
 
 export interface WebViewAPI {
-  initParams: Record<string, string | undefined>;
+  initParams: Record<string, string | null>;
   isIframe: boolean;
   postEvent: (eventType: EventType, callback?: () => void, eventData?: EventData) => void;
   receiveEvent: (eventType: EventType, eventData: EventData) => void;
@@ -36,6 +36,7 @@ declare global {
       Utils: {
         urlSafeDecode: typeof urlSafeDecode;
         urlParseQueryString: typeof urlParseQueryString;
+        safeParseUrlParams: typeof safeParseUrlParams;
       };
       MiniApp: MiniAppAPI;
     };
