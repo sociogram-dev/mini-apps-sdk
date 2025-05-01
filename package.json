@@ -1,6 +1,6 @@
 {
   "name": "@sociogram-dev/mini-apps-sdk",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "SDK for creating mini apps that integrate with Sociogram",
   "type": "module",
   "files": [
