@@ -146,9 +146,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
 
   webView.onEvent('mini_app_invoice_closed', (_, eventData: EventData) => {
     const { invoiceId, status } = eventData as { invoiceId: string; status: InvoiceStatus };
-    console.log('[Sociogram.MiniApp] < invoice_closed', invoiceId, status);
     const callback = activeInvoices.get(invoiceId);
-    console.log('[Sociogram.MiniApp] < callback', callback);
     if (callback) {
       callback(status);
       activeInvoices.delete(invoiceId);
@@ -182,7 +180,6 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     },
 
     openInvoice: (invoiceData: Record<string, unknown>, callback?: InvoiceCallback) => {
-      console.log('[Sociogram.MiniApp] > openInvoice', invoiceData, callback);
       const invoiceId =
         invoiceData.id?.toString() || `invoice_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
@@ -192,7 +189,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
 
       const completeInvoiceData = {
         ...invoiceData,
-        id: invoiceId,
+        invoiceId,
       };
 
       webView.postEvent('mini_app_open_invoice', () => {}, {
