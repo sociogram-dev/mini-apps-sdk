@@ -170,11 +170,6 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       webView.postEvent('mini_app_open_link', () => {}, { url, options });
     },
 
-    openLoginModal: (callback?: () => void) => {
-      webView.postEvent('mini_app_open_login_modal', () => {}, {});
-      callback?.();
-    },
-
     openTelegramLink: (url: string, options?: Record<string, unknown>) => {
       webView.postEvent('mini_app_open_telegram_link', () => {}, { url, options });
     },

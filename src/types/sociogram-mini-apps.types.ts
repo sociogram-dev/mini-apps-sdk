@@ -31,7 +31,6 @@ export interface MiniAppAPI {
   platform?: string;
   readTextFromClipboard: (text: string, callback?: () => void) => void;
   openLink: (url: string, options?: Record<string, unknown>) => void;
-  openLoginModal: (callback?: () => void) => void;
   openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
   openInvoice: (data: Record<string, unknown>, callback?: InvoiceCallback) => string;
 }

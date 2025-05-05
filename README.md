@@ -81,9 +81,6 @@ const invoiceId = miniApp.openInvoice(invoiceData, callback);
 // Read text from clipboard
 miniApp.readTextFromClipboard('text', callback);
 
-// Open login modal
-miniApp.openLoginModal(callback);
-
 // Open Telegram link
 miniApp.openTelegramLink('https://t.me/example', { options });
 
@@ -127,4 +124,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
