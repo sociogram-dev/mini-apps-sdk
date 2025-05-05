@@ -161,8 +161,8 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       return miniAppData.version;
     },
 
-    copyToClipboard: (text: string, callback?: () => void) => {
-      webView.postEvent('mini_app_copy_to_clipboard', () => {}, { text });
+    readTextFromClipboard: (callback?: () => void) => {
+      webView.postEvent('mini_app_read_text_from_clipboard', () => {}, {});
       callback?.();
     },
 

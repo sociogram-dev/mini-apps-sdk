@@ -65,8 +65,8 @@ miniApp.openLink('https://example.com', { options });
 // Open invoice
 miniApp.openInvoice(invoiceData, callback);
 
-// Copy text to clipboard
-miniApp.copyToClipboard('text to copy', callback);
+// Read text from clipboard
+miniApp.readTextFromClipboard('text', callback);
 
 // Open login modal
 miniApp.openLoginModal(callback);

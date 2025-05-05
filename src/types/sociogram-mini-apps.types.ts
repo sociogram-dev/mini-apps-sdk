@@ -29,7 +29,7 @@ export interface MiniAppAPI {
   get initData(): Record<string, string | null>;
   get version(): string;
   platform?: string;
-  copyToClipboard: (text: string, callback?: () => void) => void;
+  readTextFromClipboard: (text: string, callback?: () => void) => void;
   openLink: (url: string, options?: Record<string, unknown>) => void;
   openLoginModal: (callback?: () => void) => void;
   openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
