@@ -33,11 +33,16 @@ export const urlParseQueryString = (queryString: string): Record<string, string 
   return params;
 };
 
-export const safeParseUrlParams = (): Record<string, string | null> => {
+export const safeParseUrlParams = (): Record<string, string | number | null> => {
   try {
     const searchParams = new URLSearchParams(window.location.search);
     return Object.fromEntries(
-      Array.from(searchParams.entries()).map(([key, value]) => [key, value === 'null' ? null : value])
+      Array.from(searchParams.entries()).map(([key, value]) => {
+        if (value === 'null') return [key, null];
+        // Check if the value is a valid number (including 0)
+        const numValue = Number(value);
+        return [key, !isNaN(numValue) && value !== '' ? numValue : value];
+      })
     );
   } catch (error) {
     console.error('[Sociogram.MiniApp] Failed to parse URL parameters:', error);

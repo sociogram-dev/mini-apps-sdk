@@ -84,10 +84,54 @@ miniApp.readTextFromClipboard('text', callback);
 // Open Telegram link
 miniApp.openTelegramLink('https://t.me/example', { options });
 
+// Follow a user
+miniApp.followUser('user_address', (status) => {
+  // Handle follow status
+});
+
+// Get user's followers
+const followersRequestId = miniApp.getFollowers(
+  { limit: 10, cursor: null }, // Optional parameters
+  (response) => {
+    // Handle followers response
+  }
+);
+
+// Get user's following
+const followingRequestId = miniApp.getFollowing(
+  { limit: 10, cursor: null }, // Optional parameters
+  (response) => {
+    // Handle following response
+  }
+);
+
+// Get user's friends
+const friendsRequestId = miniApp.getFriends(
+  { limit: 10, cursor: null }, // Optional parameters
+  (response) => {
+    // Handle friends response
+  }
+);
+
 // Access initialization data
 const initData = miniApp.initData;
 const version = miniApp.version;
 const platform = miniApp.platform; // Optional platform information
+```
+
+### Response Types
+
+The social interaction methods return a `UsersResponse` type with the following structure:
+
+```typescript
+interface UsersResponse {
+  users: Array<{
+    address: string;
+    // Additional user properties
+  }>;
+  total: number;
+  hasMore: boolean;
+}
 ```
 
 ## Development
