@@ -20,7 +20,7 @@ export interface WebViewAPI {
 }
 
 export interface MiniAppData {
-  initData: Record<string, string | null>;
+  initData: Record<string, string | number | null>;
   version: string;
   platform?: string;
 }
