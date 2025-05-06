@@ -148,6 +148,16 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
   const activeFollowersCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
   const activeFollowingCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
   const activeFriendsCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
+  const activeFollowUserCallbacks: Map<string, (status: string) => void> = new Map();
+
+  webView.onEvent('mini_app_follow_user_response', (_, eventData: EventData) => {
+    const data = eventData as { address: string; status: string };
+    const callback = activeFollowUserCallbacks.get(data.address);
+    if (callback) {
+      callback(data.status);
+      activeFollowUserCallbacks.delete(data.address);
+    }
+  });
 
   webView.onEvent('mini_app_invoice_closed', (_, eventData: EventData) => {
     const { invoiceId, status } = eventData as { invoiceId: string; status: InvoiceStatus };
@@ -191,6 +201,13 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     },
     get version() {
       return miniAppData.version;
+    },
+
+    followUser: (address: string, callback?: (status: string) => void) => {
+      if (callback) {
+        activeFollowUserCallbacks.set(address, callback);
+      }
+      webView.postEvent('mini_app_follow_user', () => {}, { address });
     },
 
     readTextFromClipboard: (text: string, callback?: () => void) => {

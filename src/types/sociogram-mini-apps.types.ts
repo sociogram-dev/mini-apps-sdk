@@ -61,6 +61,7 @@ export interface MiniAppAPI {
   get initData(): Record<string, string | null>;
   get version(): string;
   platform?: string;
+  followUser: (address: string, callback?: (status: string) => void) => void;
   readTextFromClipboard: (text: string, callback?: () => void) => void;
   openLink: (url: string, options?: Record<string, unknown>) => void;
   openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
