@@ -9,6 +9,8 @@ import {
   MiniAppAPI,
   InvoiceStatus,
   InvoiceCallback,
+  UsersResponse,
+  GetUsersParams,
 } from './types/sociogram-mini-apps.types';
 
 const detectEnvironment = () => {
@@ -143,6 +145,8 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
   };
 
   const activeInvoices: Map<string, InvoiceCallback> = new Map();
+  const activeFollowersCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
+  const activeFollowingCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
 
   webView.onEvent('mini_app_invoice_closed', (_, eventData: EventData) => {
     const { invoiceId, status } = eventData as { invoiceId: string; status: InvoiceStatus };
@@ -150,6 +154,24 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     if (callback) {
       callback(status);
       activeInvoices.delete(invoiceId);
+    }
+  });
+
+  webView.onEvent('mini_app_get_followers_response', (_, eventData: EventData) => {
+    const data = eventData as { requestId: string; response: UsersResponse };
+    const callback = activeFollowersCallbacks.get(data.requestId);
+    if (callback) {
+      callback(data.response);
+      activeFollowersCallbacks.delete(data.requestId);
+    }
+  });
+
+  webView.onEvent('mini_app_get_following_response', (_, eventData: EventData) => {
+    const data = eventData as { requestId: string; response: UsersResponse };
+    const callback = activeFollowingCallbacks.get(data.requestId);
+    if (callback) {
+      callback(data.response);
+      activeFollowingCallbacks.delete(data.requestId);
     }
   });
 
@@ -190,6 +212,30 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       webView.postEvent('mini_app_open_invoice', () => {}, completeInvoiceData);
 
       return invoiceId;
+    },
+
+    getFollowers: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => {
+      const requestId = `followers_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+      if (callback) {
+        activeFollowersCallbacks.set(requestId, callback);
+      }
+
+      webView.postEvent('mini_app_get_followers', () => {}, { requestId, ...params });
+
+      return requestId;
+    },
+
+    getFollowing: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => {
+      const requestId = `following_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+      if (callback) {
+        activeFollowingCallbacks.set(requestId, callback);
+      }
+
+      webView.postEvent('mini_app_get_following', () => {}, { requestId, ...params });
+
+      return requestId;
     },
   };
 

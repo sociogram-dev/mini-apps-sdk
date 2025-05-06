@@ -25,6 +25,37 @@ export interface MiniAppData {
   platform?: string;
 }
 
+export interface User {
+  _id: string;
+  createdAt: string;
+  id: string;
+  address: string;
+  domain: string | null;
+  name: string;
+  avatar: string;
+  verified: boolean;
+  subscription: {
+    following: number;
+    followers: number;
+  };
+  twitter: {
+    twitterId: string | null;
+    name: string | null;
+    followers: number;
+  };
+  isFollowed: boolean;
+}
+
+export interface UsersResponse {
+  cursor: string | null;
+  rows: User[];
+}
+
+export interface GetUsersParams {
+  limit?: number;
+  cursor?: string;
+}
+
 export interface MiniAppAPI {
   get initData(): Record<string, string | null>;
   get version(): string;
@@ -33,6 +64,8 @@ export interface MiniAppAPI {
   openLink: (url: string, options?: Record<string, unknown>) => void;
   openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
   openInvoice: (data: Record<string, unknown>, callback?: InvoiceCallback) => string;
+  getFollowers: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
+  getFollowing: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
 }
 
 declare global {
