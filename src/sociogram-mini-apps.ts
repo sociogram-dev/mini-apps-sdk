@@ -78,7 +78,7 @@ const createWebView = (): WebViewAPI => {
 
   if (isIframe || environment === 'react-native') {
     window.addEventListener('message', event => {
-      if (event.source !== window.parent) return;
+      // if (event.source !== window.parent) return;
 
       let dataParsed;
       try {
