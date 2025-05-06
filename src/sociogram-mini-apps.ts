@@ -147,6 +147,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
   const activeInvoices: Map<string, InvoiceCallback> = new Map();
   const activeFollowersCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
   const activeFollowingCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
+  const activeFriendsCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
 
   webView.onEvent('mini_app_invoice_closed', (_, eventData: EventData) => {
     const { invoiceId, status } = eventData as { invoiceId: string; status: InvoiceStatus };
@@ -172,6 +173,15 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     if (callback) {
       callback(data.response);
       activeFollowingCallbacks.delete(data.requestId);
+    }
+  });
+
+  webView.onEvent('mini_app_get_friends_response', (_, eventData: EventData) => {
+    const data = eventData as { requestId: string; response: UsersResponse };
+    const callback = activeFriendsCallbacks.get(data.requestId);
+    if (callback) {
+      callback(data.response);
+      activeFriendsCallbacks.delete(data.requestId);
     }
   });
 
@@ -234,6 +244,18 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       }
 
       webView.postEvent('mini_app_get_following', () => {}, { requestId, ...params });
+
+      return requestId;
+    },
+
+    getFriends: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => {
+      const requestId = `friends_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+      if (callback) {
+        activeFriendsCallbacks.set(requestId, callback);
+      }
+
+      webView.postEvent('mini_app_get_friends', () => {}, { requestId, ...params });
 
       return requestId;
     },

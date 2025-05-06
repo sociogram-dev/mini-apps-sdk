@@ -49,6 +49,7 @@ export interface User {
 export interface UsersResponse {
   cursor: string | null;
   rows: User[];
+  error?: string;
 }
 
 export interface GetUsersParams {
@@ -66,6 +67,7 @@ export interface MiniAppAPI {
   openInvoice: (data: Record<string, unknown>, callback?: InvoiceCallback) => string;
   getFollowers: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   getFollowing: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
+  getFriends: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
 }
 
 declare global {
