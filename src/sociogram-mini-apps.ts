@@ -149,7 +149,6 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
   const activeFollowingCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
   const activeFriendsCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
   const activeFollowUserCallbacks: Map<string, (status: string) => void> = new Map();
-  const activeCheckFollowCallbacks: Map<string, (isFollowing: boolean) => void> = new Map();
 
   webView.onEvent('mini_app_follow_user_response', (_, eventData: EventData) => {
     const data = eventData as { address: string; status: string };
@@ -196,28 +195,12 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     }
   });
 
-  webView.onEvent('mini_app_check_follow_response', (_, eventData: EventData) => {
-    const data = eventData as { address: string; isFollowing: boolean };
-    const callback = activeCheckFollowCallbacks.get(data.address);
-    if (callback) {
-      callback(data.isFollowing);
-      activeCheckFollowCallbacks.delete(data.address);
-    }
-  });
-
   const miniApp: MiniAppAPI = {
     get initData() {
       return miniAppData.initData;
     },
     get version() {
       return miniAppData.version;
-    },
-
-    checkFollow: (slug: string, callback?: (isFollowing: boolean) => void) => {
-      if (callback) {
-        activeCheckFollowCallbacks.set(slug, callback);
-      }
-      webView.postEvent('mini_app_check_follow', () => {}, { slug });
     },
 
     followUser: (address: string, callback?: (status: string) => void) => {
