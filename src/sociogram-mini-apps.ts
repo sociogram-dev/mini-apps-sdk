@@ -253,9 +253,9 @@ const initSociogramAPI = () => {
 
   // Create and expose Utils
   window.Sociogram.Utils = {
+    safeParseUrlParams,
     urlSafeDecode,
     urlParseQueryString,
-    safeParseUrlParams,
   };
 
   window.Sociogram.MiniApp = createMiniApp(webView);
