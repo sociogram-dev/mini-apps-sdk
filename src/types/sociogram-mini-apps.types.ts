@@ -9,7 +9,7 @@ export type InvoiceStatus = 'success' | 'failed';
 export type InvoiceCallback = (status: InvoiceStatus) => void;
 
 export interface WebViewAPI {
-  initParams: Record<string, string | number | null>;
+  initParams: Record<string, string | null>;
   isIframe: boolean;
   postEvent: (eventType: EventType, callback?: () => void, eventData?: EventData) => void;
   receiveEvent: (eventType: EventType, eventData: EventData) => void;
@@ -20,7 +20,7 @@ export interface WebViewAPI {
 }
 
 export interface MiniAppData {
-  initData: Record<string, string | number | null>;
+  initData: Record<string, string | null>;
   version: string;
   platform?: string;
 }
@@ -58,7 +58,7 @@ export interface GetUsersParams {
 }
 
 export interface MiniAppAPI {
-  get initData(): Record<string, string | number | null>;
+  get initData(): Record<string, string | null>;
   get version(): string;
   platform?: string;
   checkFollow: (slug: string, callback?: (isFollowing: boolean) => void) => void;

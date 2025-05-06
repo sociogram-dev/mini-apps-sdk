@@ -33,15 +33,13 @@ export const urlParseQueryString = (queryString: string): Record<string, string 
   return params;
 };
 
-export const safeParseUrlParams = (): Record<string, string | number | null> => {
+export const safeParseUrlParams = (): Record<string, string | null> => {
   try {
     const searchParams = new URLSearchParams(window.location.search);
     return Object.fromEntries(
       Array.from(searchParams.entries()).map(([key, value]) => {
         if (value === 'null') return [key, null];
-        // Check if the value is a valid number (including 0)
-        const numValue = Number(value);
-        return [key, !isNaN(numValue) && value !== '' ? numValue : value];
+        return [key, value];
       })
     );
   } catch (error) {
