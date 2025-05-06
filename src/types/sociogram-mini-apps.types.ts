@@ -61,6 +61,7 @@ export interface MiniAppAPI {
   get initData(): Record<string, string | number | null>;
   get version(): string;
   platform?: string;
+  checkFollow: (slug: string, callback?: (isFollowing: boolean) => void) => void;
   followUser: (address: string, callback?: (status: string) => void) => void;
   readTextFromClipboard: (text: string, callback?: () => void) => void;
   openLink: (url: string, options?: Record<string, unknown>) => void;
