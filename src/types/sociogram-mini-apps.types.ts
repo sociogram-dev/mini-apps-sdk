@@ -69,7 +69,7 @@ export interface MiniAppAPI {
   getFollowers: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   getFollowing: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   getFriends: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
-  share: (text: string) => void;
+  share: (data: { address: string; text: string; url: string }) => void;
 }
 
 declare global {
