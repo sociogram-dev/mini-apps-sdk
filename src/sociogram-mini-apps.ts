@@ -276,6 +276,10 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
 
       return requestId;
     },
+
+    share: (text: string) => {
+      webView.postEvent('mini_app_share', () => {}, { text });
+    },
   };
 
   return miniApp;
