@@ -103,13 +103,10 @@ const createWebView = (): WebViewAPI => {
     });
 
     try {
-      window.parent.postMessage(
-        JSON.stringify({
-          eventType: 'iframe_ready',
-          eventData: { reload_supported: true },
-        }),
-        '*'
-      );
+      postMessage({
+        eventType: 'iframe_ready',
+        eventData: { reload_supported: true },
+      });
     } catch (error) {
       console.error('Failed to post iframe ready message:', error);
     }
