@@ -65,11 +65,23 @@ export interface MiniAppAPI {
   readTextFromClipboard: (text: string, callback?: () => void) => void;
   openLink: (url: string, options?: Record<string, unknown>) => void;
   openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
-  openInvoice: (data: Record<string, unknown>, callback?: InvoiceCallback) => string;
+  openInvoice: (data: InvoiceData, callback?: InvoiceCallback) => string;
   getFollowers: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   getFollowing: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   getFriends: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   share: (data: { text: string; url: string }) => void;
+}
+
+export enum CurrencyType {
+  USD = 'usd',
+  SOL = 'sol',
+}
+
+export interface InvoiceData {
+  invoicePayload: Record<string, unknown>;
+  title: string;
+  price: number;
+  currency: CurrencyType;
 }
 
 declare global {
