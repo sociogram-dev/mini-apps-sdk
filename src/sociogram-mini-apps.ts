@@ -13,7 +13,6 @@ import {
   GetUsersParams,
   InvoiceData,
   PostActionData,
-  PostActionResponse,
 } from './types/sociogram-mini-apps.types';
 
 const detectEnvironment = () => {
@@ -149,7 +148,6 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
   const activeFollowingCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
   const activeFriendsCallbacks: Map<string, (response: UsersResponse) => void> = new Map();
   const activeFollowUserCallbacks: Map<string, (status: string) => void> = new Map();
-  const activePostActionCallbacks: Map<string, (response: PostActionResponse) => void> = new Map();
 
   webView.onEvent('mini_app_follow_user_response', (_, eventData: EventData) => {
     const data = eventData as { address: string; status: string };
@@ -193,15 +191,6 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     if (callback) {
       callback(data.response);
       activeFriendsCallbacks.delete(data.requestId);
-    }
-  });
-
-  webView.onEvent('mini_app_post_action_response', (_, eventData: EventData) => {
-    const data = eventData as { requestId: string; response: PostActionResponse };
-    const callback = activePostActionCallbacks.get(data.requestId);
-    if (callback) {
-      callback(data.response);
-      activePostActionCallbacks.delete(data.requestId);
     }
   });
 
@@ -290,34 +279,16 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       webView.postEvent('mini_app_share', () => {}, data);
     },
 
-    openRewardModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => {
-      const requestId = `reward_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-
-      if (callback) {
-        activePostActionCallbacks.set(requestId, callback);
-      }
-
-      webView.postEvent('mini_app_open_reward_modal', () => {}, { requestId, ...data });
+    openRewardModal: (data: PostActionData) => {
+      webView.postEvent('mini_app_open_reward_modal', () => {}, data);
     },
 
-    openTipModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => {
-      const requestId = `tip_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-
-      if (callback) {
-        activePostActionCallbacks.set(requestId, callback);
-      }
-
-      webView.postEvent('mini_app_open_tip_modal', () => {}, { requestId, ...data });
+    openTipModal: (data: PostActionData) => {
+      webView.postEvent('mini_app_open_tip_modal', () => {}, data);
     },
 
-    openLikeModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => {
-      const requestId = `like_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-
-      if (callback) {
-        activePostActionCallbacks.set(requestId, callback);
-      }
-
-      webView.postEvent('mini_app_open_like_modal', () => {}, { requestId, ...data });
+    openLikeModal: (data: PostActionData) => {
+      webView.postEvent('mini_app_open_like_modal', () => {}, data);
     },
   };
 
