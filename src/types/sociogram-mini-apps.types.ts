@@ -11,7 +11,7 @@ export type InvoiceCallback = (status: InvoiceStatus) => void;
 export interface WebViewAPI {
   initParams: Record<string, string | null>;
   isIframe: boolean;
-  postEvent: (eventType: EventType, callback?: () => void, eventData?: EventData) => void;
+  postEvent: (eventType: EventType, eventData?: EventData, callback?: () => void) => void;
   receiveEvent: (eventType: EventType, eventData: EventData) => void;
   callEventCallbacks: (eventType: EventType, func: (callback: EventCallback) => void) => void;
   postMessage: (message: Record<string, unknown>) => void;
@@ -73,7 +73,7 @@ export interface MiniAppAPI {
   get version(): string;
   platform?: string;
   followUser: (address: string, callback?: (status: string) => void) => void;
-  readTextFromClipboard: (text: string, callback?: () => void) => void;
+  readTextFromClipboard: (text: string) => void;
   openLink: (url: string, options?: Record<string, unknown>) => void;
   openTelegramLink: (url: string, options?: Record<string, unknown>) => void;
   openInvoice: (data: InvoiceData, callback?: InvoiceCallback) => string;
@@ -81,9 +81,9 @@ export interface MiniAppAPI {
   getFollowing: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   getFriends: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   share: (data: { text: string; url: string }) => void;
-  openRewardModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => void;
-  openTipModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => void;
-  openLikeModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => void;
+  openRewardModal: (data: PostActionData) => void;
+  openTipModal: (data: PostActionData) => void;
+  openLikeModal: (data: PostActionData) => void;
 }
 
 export enum CurrencyType {

@@ -114,7 +114,7 @@ const createWebView = (): WebViewAPI => {
     }
   }
 
-  const postEvent = (eventType: EventType, callback?: () => void, eventData: EventData = '') => {
+  const postEvent = (eventType: EventType, eventData: EventData = '', callback?: () => void) => {
     console.log('[Sociogram.WebView] > postEvent', eventType, eventData);
     try {
       postMessage({ eventType, eventData });
@@ -206,20 +206,19 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       if (callback) {
         activeFollowUserCallbacks.set(address, callback);
       }
-      webView.postEvent('mini_app_follow_user', () => {}, { address });
+      webView.postEvent('mini_app_follow_user', { address });
     },
 
-    readTextFromClipboard: (text: string, callback?: () => void) => {
-      webView.postEvent('mini_app_read_text_from_clipboard', () => {}, { text });
-      callback?.();
+    readTextFromClipboard: (text: string) => {
+      webView.postEvent('mini_app_read_text_from_clipboard', { text });
     },
 
     openLink: (url: string, options?: Record<string, unknown>) => {
-      webView.postEvent('mini_app_open_link', () => {}, { url, options });
+      webView.postEvent('mini_app_open_link', { url, options });
     },
 
     openTelegramLink: (url: string, options?: Record<string, unknown>) => {
-      webView.postEvent('mini_app_open_telegram_link', () => {}, { url, options });
+      webView.postEvent('mini_app_open_telegram_link', { url, options });
     },
 
     openInvoice: (invoiceData: InvoiceData, callback?: InvoiceCallback) => {
@@ -234,7 +233,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
         invoiceId,
       };
 
-      webView.postEvent('mini_app_open_invoice', () => {}, completeInvoiceData);
+      webView.postEvent('mini_app_open_invoice', completeInvoiceData);
 
       return invoiceId;
     },
@@ -246,7 +245,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
         activeFollowersCallbacks.set(requestId, callback);
       }
 
-      webView.postEvent('mini_app_get_followers', () => {}, { requestId, ...params });
+      webView.postEvent('mini_app_get_followers', { requestId, ...params });
 
       return requestId;
     },
@@ -258,7 +257,7 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
         activeFollowingCallbacks.set(requestId, callback);
       }
 
-      webView.postEvent('mini_app_get_following', () => {}, { requestId, ...params });
+      webView.postEvent('mini_app_get_following', { requestId, ...params });
 
       return requestId;
     },
@@ -270,25 +269,25 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
         activeFriendsCallbacks.set(requestId, callback);
       }
 
-      webView.postEvent('mini_app_get_friends', () => {}, { requestId, ...params });
+      webView.postEvent('mini_app_get_friends', { requestId, ...params });
 
       return requestId;
     },
 
     share: (data: { text: string; url: string }) => {
-      webView.postEvent('mini_app_share', () => {}, data);
+      webView.postEvent('mini_app_share', data);
     },
 
     openRewardModal: (data: PostActionData) => {
-      webView.postEvent('mini_app_open_reward_modal', () => {}, data);
+      webView.postEvent('mini_app_open_reward_modal', data);
     },
 
     openTipModal: (data: PostActionData) => {
-      webView.postEvent('mini_app_open_tip_modal', () => {}, data);
+      webView.postEvent('mini_app_open_tip_modal', data);
     },
 
     openLikeModal: (data: PostActionData) => {
-      webView.postEvent('mini_app_open_like_modal', () => {}, data);
+      webView.postEvent('mini_app_open_like_modal', data);
     },
   };
 
