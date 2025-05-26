@@ -1,5 +1,5 @@
 import './sociogram-mini-apps';
-import { MiniAppAPI } from './types/sociogram-mini-apps.types';
+import { MiniAppAPI } from './types';
 
 const sociogramWindow = window as unknown as Window & { Sociogram: { MiniApp: MiniAppAPI } };
 

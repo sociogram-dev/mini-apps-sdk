@@ -1,14 +1,6 @@
 # Sociogram Mini Apps SDK
 
-A TypeScript SDK for creating mini applications that integrate with the Sociogram platform. This SDK provides a set of tools and APIs to build interactive mini apps that can be embedded within the Sociogram ecosystem.
-
-## Features
-
-- WebView communication bridge for seamless integration
-- Event handling system for bi-directional communication
-- Support for both iframe and React Native WebView environments
-- Utility functions for URL parsing and parameter handling
-- Type-safe API with TypeScript support
+A TypeScript SDK for creating mini apps that integrate with Sociogram.
 
 ## Installation
 
@@ -18,47 +10,165 @@ npm install @sociogram-dev/mini-apps-sdk
 yarn add @sociogram-dev/mini-apps-sdk
 ```
 
+## TypeScript Support
+
+This SDK is written in TypeScript and provides full type definitions. You can use it in your TypeScript projects with full type safety and autocompletion.
+
 ## Usage
 
 ### Basic Setup
 
 ```typescript
-// Import the SDK
-import MiniApp from '@sociogram-dev/mini-apps-sdk';
+import { Sociogram } from '@sociogram-dev/mini-apps-sdk';
 
-// Or access through the global Sociogram namespace
-// Your mini app will automatically have access to the Sociogram namespace
-// through the window object after including the SDK
+// The SDK is automatically initialized and available globally
+const miniApp = Sociogram.MiniApp;
 
-// Access the WebView API
-const webView = window.Sociogram.WebView;
+// Access initial data
+console.log(miniApp.initData);
 
-// Access utility functions
-const { urlSafeDecode, urlParseQueryString, safeParseUrlParams } = window.Sociogram.Utils;
+// Get SDK version
+console.log(miniApp.version);
 
-// Access MiniApp API
-const miniApp = window.Sociogram.MiniApp;
-// Or use the imported MiniApp directly
+// Check platform (optional)
+console.log(miniApp.platform);
 ```
 
-### WebView API
-
-The WebView API provides methods for communication between your mini app and the Sociogram platform:
+### User Interactions
 
 ```typescript
-// Post events to the platform
-webView.postEvent('event_name', callback, eventData);
-
-// Receive events from the platform
-webView.receiveEvent('event_name', eventData);
-
-// Subscribe to events
-webView.onEvent('event_name', (eventType, eventData) => {
-  // Handle event
+// Follow a user
+miniApp.followUser('user_wallet_address', (status) => {
+  console.log(`Follow status: ${status}`);
 });
 
-// Unsubscribe from events
-webView.offEvent('event_name', callbackFunction);
+// Get user's followers
+const followersRequestId = miniApp.getFollowers(
+  { limit: 10, cursor: 'next_page_cursor' },
+  (response) => {
+    if (response.error) {
+      console.error(response.error);
+      return;
+    }
+    console.log('Followers:', response.rows);
+    console.log('Next cursor:', response.cursor);
+  }
+);
+
+// Get users that a user is following
+const followingRequestId = miniApp.getFollowing(
+  { limit: 10 },
+  (response) => {
+    if (response.error) {
+      console.error(response.error);
+      return;
+    }
+    console.log('Following:', response.rows);
+  }
+);
+
+// Get user's friends
+const friendsRequestId = miniApp.getFriends(
+  { limit: 10 },
+  (response) => {
+    if (response.error) {
+      console.error(response.error);
+      return;
+    }
+    console.log('Friends:', response.rows);
+  }
+);
+```
+
+### Post Actions
+
+```typescript
+// Like a post
+miniApp.openLikeModal({
+  postId: 'post_id'
+});
+
+// Tip a post
+miniApp.openTipModal({
+  postId: 'post_id'
+});
+
+// Reward a post
+miniApp.openRewardModal({
+  postId: 'post_id'
+});
+```
+
+### Navigation and Sharing
+
+```typescript
+// Open a link in the browser
+miniApp.openLink('https://example.com', {
+  // Optional parameters
+  target: '_blank'
+});
+
+// Open a Telegram link
+miniApp.openTelegramLink('https://t.me/example', {
+  // Optional parameters
+  target: '_blank'
+});
+
+// Share content
+miniApp.share({
+  text: 'Check this out!',
+  url: 'https://example.com'
+});
+```
+
+### Clipboard Operations
+
+```typescript
+// Read text from clipboard
+miniApp.readTextFromClipboard('text_to_read');
+```
+
+### Invoice Handling
+
+```typescript
+// Open an invoice
+const invoiceId = miniApp.openInvoice(
+  {
+    title: 'Purchase Item',
+    price: 10,
+    currency: 'usd', // or 'sol'
+    invoicePayload: {
+      // Your custom payload data
+      itemId: '123',
+      description: 'Premium subscription'
+    }
+  },
+  (status) => {
+    if (status === 'success') {
+      console.log('Payment successful!');
+    } else {
+      console.log('Payment failed');
+    }
+  }
+);
+```
+
+### WebView Communication
+
+```typescript
+// Access WebView API directly
+const webView = Sociogram.WebView;
+
+// Post an event
+webView.postEvent('custom_event', { data: 'value' });
+
+// Listen for events
+webView.onEvent('custom_event', (eventType, eventData) => {
+  console.log(`Received ${eventType}:`, eventData);
+});
+
+// Remove event listener
+webView.offEvent('custom_event', callback);
 
 // Check if running in iframe
 const isIframe = webView.isIframe;
@@ -67,105 +177,151 @@ const isIframe = webView.isIframe;
 const initParams = webView.initParams;
 ```
 
-### MiniApp API
-
-The MiniApp API provides high-level functionality for your mini app:
+### Utility Functions
 
 ```typescript
-// Open external links
-miniApp.openLink('https://example.com', { options });
+const { urlSafeDecode, urlParseQueryString, safeParseUrlParams } = Sociogram.Utils;
 
-// Open invoice - returns a string identifier
-const invoiceId = miniApp.openInvoice(invoiceData, callback);
+// Decode URL-safe strings
+const decoded = urlSafeDecode('encoded_string');
 
-// Read text from clipboard
-miniApp.readTextFromClipboard('text', callback);
+// Parse query string
+const params = urlParseQueryString('?key=value');
 
-// Open Telegram link
-miniApp.openTelegramLink('https://t.me/example', { options });
-
-// Follow a user
-miniApp.followUser('user_address', (status) => {
-  // Handle follow status
-});
-
-// Get user's followers
-const followersRequestId = miniApp.getFollowers(
-  { limit: 10, cursor: null }, // Optional parameters
-  (response) => {
-    // Handle followers response
-  }
-);
-
-// Get user's following
-const followingRequestId = miniApp.getFollowing(
-  { limit: 10, cursor: null }, // Optional parameters
-  (response) => {
-    // Handle following response
-  }
-);
-
-// Get user's friends
-const friendsRequestId = miniApp.getFriends(
-  { limit: 10, cursor: null }, // Optional parameters
-  (response) => {
-    // Handle friends response
-  }
-);
-
-// Access initialization data
-const initData = miniApp.initData;
-const version = miniApp.version;
-const platform = miniApp.platform; // Optional platform information
+// Safely parse URL parameters
+const safeParams = safeParseUrlParams();
 ```
 
-### Response Types
+## Type Definitions
 
-The social interaction methods return a `UsersResponse` type with the following structure:
+The SDK provides comprehensive TypeScript type definitions. Here are the main types:
+
+### User Interface
+
+```typescript
+interface User {
+  _id: string;
+  id: string;
+  address: string;
+  domain: string | null;
+  name: string;
+  avatar: string;
+  verified: boolean;
+  subscription: {
+    following: number;
+    followers: number;
+  };
+  twitter: {
+    twitterId: string | null;
+    name: string | null;
+    followers: number;
+  };
+  isFollowed: boolean;
+}
+```
+
+### API Response Types
 
 ```typescript
 interface UsersResponse {
-  users: Array<{
-    address: string;
-    // Additional user properties
-  }>;
-  total: number;
-  hasMore: boolean;
+  cursor: string | null;
+  rows: User[];
+  error?: string;
 }
+
+interface PostActionResponse {
+  status: 'success' | 'failed';
+  message?: string;
+}
+
+interface InvoiceData {
+  invoicePayload: Record<string, unknown>;
+  title: string;
+  price: number;
+  currency: CurrencyType;
+}
+
+enum CurrencyType {
+  USD = 'usd',
+  SOL = 'sol'
+}
+```
+
+### Event Handling
+
+```typescript
+type EventCallback = (eventType: string, eventData: unknown) => void;
+
+// Register event handler
+Sociogram.WebView.onEvent('event_type', (type, data) => {
+  console.log(`Event ${type}:`, data);
+});
+
+// Remove event handler
+Sociogram.WebView.offEvent('event_type', callback);
+```
+
+## Environment Detection
+
+The SDK automatically detects the environment it's running in:
+
+- `iframe`: When running inside an iframe
+- `react-native`: When running in a React Native WebView
+- `web`: When running in a regular web browser
+
+```typescript
+const isIframe = Sociogram.WebView.isIframe;
+```
+
+## Error Handling
+
+The SDK provides error handling through callbacks and response objects:
+
+```typescript
+// Error handling in user list responses
+miniApp.getFollowers({}, (response) => {
+  if (response.error) {
+    console.error('Error fetching followers:', response.error);
+    return;
+  }
+  // Handle successful response
+});
+
+// Error handling in invoice callbacks
+miniApp.openInvoice(invoiceData, (status) => {
+  if (status === 'failed') {
+    console.error('Payment failed');
+    return;
+  }
+  // Handle successful payment
+});
 ```
 
 ## Development
 
-### Prerequisites
+### Building
 
-- Node.js
-- npm or yarn
+```bash
+# Install dependencies
+yarn install
 
-### Setup
+# Build the SDK
+yarn build
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+# Watch mode for development
+yarn build:watch
+```
 
-### Available Scripts
+### Testing
 
-- `npm run dev` - Start development server
-- `npm run build` - Build the SDK
-- `npm run build:watch` - Build the SDK in watch mode
-- `npm run preview` - Preview the build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
-- `npm run test` - Run tests
-- `npm run test:watch` - Run tests in watch mode
+```bash
+# Run tests
+yarn test
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+# Watch mode for tests
+yarn test:watch
+```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT

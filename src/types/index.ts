@@ -59,13 +59,6 @@ export interface GetUsersParams {
 
 export interface PostActionData {
   postId: string;
-  amount?: number;
-  currency?: CurrencyType;
-}
-
-export interface PostActionResponse {
-  status: 'success' | 'failed';
-  message?: string;
 }
 
 export interface MiniAppAPI {

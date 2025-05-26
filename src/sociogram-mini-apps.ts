@@ -13,7 +13,7 @@ import {
   GetUsersParams,
   InvoiceData,
   PostActionData,
-} from './types/sociogram-mini-apps.types';
+} from './types';
 
 const detectEnvironment = () => {
   if (window.ReactNativeWebView) {
