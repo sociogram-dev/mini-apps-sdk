@@ -57,6 +57,17 @@ export interface GetUsersParams {
   cursor?: string;
 }
 
+export interface PostActionData {
+  postId: string;
+  amount?: number;
+  currency?: CurrencyType;
+}
+
+export interface PostActionResponse {
+  status: 'success' | 'failed';
+  message?: string;
+}
+
 export interface MiniAppAPI {
   get initData(): Record<string, string | null>;
   get version(): string;
@@ -70,6 +81,9 @@ export interface MiniAppAPI {
   getFollowing: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   getFriends: (params?: GetUsersParams, callback?: (response: UsersResponse) => void) => string;
   share: (data: { text: string; url: string }) => void;
+  openRewardModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => void;
+  openTipModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => void;
+  openLikeModal: (data: PostActionData, callback?: (response: PostActionResponse) => void) => void;
 }
 
 export enum CurrencyType {
