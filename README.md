@@ -8,6 +8,8 @@ A TypeScript SDK for creating mini apps that integrate with Sociogram.
 npm install @sociogram-dev/mini-apps-sdk
 # or
 yarn add @sociogram-dev/mini-apps-sdk
+# or
+pnpm add @sociogram-dev/mini-apps-sdk
 ```
 
 ## TypeScript Support
@@ -29,15 +31,11 @@ console.log(miniApp.initData);
 
 // Get SDK version
 console.log(miniApp.version);
-
-// Check platform (optional)
-console.log(miniApp.platform);
 ```
 
 ### User Interactions
 
 ```typescript
-
 // Get user's followers
 const followersRequestId = miniApp.getFollowers(
   { limit: 10, cursor: 'next_page_cursor' },
@@ -74,6 +72,9 @@ const friendsRequestId = miniApp.getFriends(
     console.log('Friends:', response.rows);
   }
 );
+
+// Follow a user
+miniApp.followUser('user_address');
 ```
 
 ### Post Actions
@@ -191,6 +192,7 @@ The SDK provides comprehensive TypeScript type definitions. Here are the main ty
 ```typescript
 interface User {
   _id: string;
+  createdAt: string;
   id: string;
   address: string;
   domain: string | null;
@@ -219,9 +221,8 @@ interface UsersResponse {
   error?: string;
 }
 
-interface PostActionResponse {
-  status: 'success' | 'failed';
-  message?: string;
+interface PostActionData {
+  postId: string;
 }
 
 interface InvoiceData {
@@ -240,7 +241,9 @@ enum CurrencyType {
 ### Event Handling
 
 ```typescript
-type EventCallback = (eventType: string, eventData: unknown) => void;
+type EventType = string;
+type EventData = unknown;
+type EventCallback = (eventType: EventType, eventData: EventData) => void;
 
 // Register event handler
 Sociogram.WebView.onEvent('event_type', (type, data) => {
