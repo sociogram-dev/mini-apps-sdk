@@ -104,12 +104,6 @@ miniApp.openLink('https://example.com', {
   target: '_blank'
 });
 
-// Open a Telegram link
-miniApp.openTelegramLink('https://t.me/example', {
-  // Optional parameters
-  target: '_blank'
-});
-
 // Share content
 miniApp.share({
   text: 'Check this out!',

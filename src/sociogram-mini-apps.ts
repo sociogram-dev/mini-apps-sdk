@@ -200,10 +200,6 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
       webView.postEvent('mini_app_open_link', { url, options });
     },
 
-    openTelegramLink: (url: string, options?: Record<string, unknown>) => {
-      webView.postEvent('mini_app_open_telegram_link', { url, options });
-    },
-
     openInvoice: (invoiceData: InvoiceData, callback?: InvoiceCallback) => {
       const invoiceId = `invoice_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
