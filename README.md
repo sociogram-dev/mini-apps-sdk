@@ -37,10 +37,6 @@ console.log(miniApp.platform);
 ### User Interactions
 
 ```typescript
-// Follow a user
-miniApp.followUser('user_wallet_address', (status) => {
-  console.log(`Follow status: ${status}`);
-});
 
 // Get user's followers
 const followersRequestId = miniApp.getFollowers(
