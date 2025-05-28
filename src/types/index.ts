@@ -75,6 +75,7 @@ export interface MiniAppAPI {
   openRewardModal: (data: PostActionData) => void;
   openTipModal: (data: PostActionData) => void;
   openLikeModal: (data: PostActionData) => void;
+  followUser: (address: string) => void;
 }
 
 export enum CurrencyType {

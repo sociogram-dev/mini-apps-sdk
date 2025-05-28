@@ -268,6 +268,10 @@ const createMiniApp = (webView: WebViewAPI): MiniAppAPI => {
     openLikeModal: (data: PostActionData) => {
       webView.postEvent('mini_app_open_like_modal', data);
     },
+
+    followUser: (address: string) => {
+      webView.postEvent('mini_app_follow_user', { address });
+    },
   };
 
   return miniApp;
