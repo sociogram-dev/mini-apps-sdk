@@ -27,6 +27,7 @@ export interface MiniAppData {
 
 export interface User {
   _id: string;
+  uid: number;
   createdAt: string;
   id: string;
   address: string;
@@ -62,7 +63,7 @@ export interface PostActionData {
 }
 
 export interface MiniAppAPI {
-  get initData(): Record<string, string | null>;
+  get initData(): Record<string, unknown>;
   get version(): string;
   platform?: string;
   readTextFromClipboard: (text: string) => void;
